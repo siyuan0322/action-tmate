@@ -40,9 +40,12 @@ export async function run() {
         if (distro === "alpine") {
           // for set -e workaround, we need to install bash because alpine doesn't have it
           await execShellCommand(optionalSudoPrefix + 'apk add openssh-client xz bash');
-        } else {
+        } else if (distro === "ubuntu") {
           await execShellCommand(optionalSudoPrefix + 'apt-get update');
           await execShellCommand(optionalSudoPrefix + 'apt-get install -y openssh-client xz-utils');
+        } else {
+          // await execShellCommand(optionalSudoPrefix + 'yum update -y');
+          await execShellCommand(optionalSudoPrefix + 'yum install -y openssh-clients xz');
         }
 
         const tmateArch = TMATE_ARCH_MAP[os.arch()];
